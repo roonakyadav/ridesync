@@ -71,6 +71,9 @@ export async function listRides(filters = {}) {
   }
 
   const { data, error } = await query
+  if (error) {
+    console.error('[rideService] listRides query failed:', error)
+  }
   return { data: data ?? [], error }
 }
 

@@ -106,8 +106,11 @@ export default function PostRide() {
     }
     const waDigits = form.whatsapp_number.replace(/[\s-]/g, '')
     if (!waDigits) return setError('WhatsApp number is required so passengers can contact you.')
-    if (!/^\+?[0-9]{10,15}$/.test(waDigits))
-      return setError('WhatsApp number must be 10–15 digits, with an optional leading +.')
+    // Validate: exactly 10 digits, starting with 6/7/8/9 (Indian mobile numbers)
+    if (!/^[6-9][0-9]{9}$/.test(waDigits))
+      return setError('Enter a valid 10-digit Indian mobile number (starting with 6/7/8/9).')
+    // Prepend 91 for international format
+    const whatsappWithCountryCode = '91' + waDigits
 
     const host_name =
       profile?.name || user.user_metadata?.name || user.user_metadata?.full_name ||
@@ -121,7 +124,7 @@ export default function PostRide() {
       departure_time: depDate.toISOString(),
       total_seats: seats,
       cost_per_person: form.cost_per_person,
-      whatsapp_number: waDigits,
+      whatsapp_number: whatsappWithCountryCode,
     })
     setSubmitting(false)
     if (apiErr) return setError(apiErr.message || 'Could not create ride.')
@@ -231,12 +234,12 @@ export default function PostRide() {
               id="whatsapp_number" type="tel" inputMode="tel"
               value={form.whatsapp_number}
               onChange={(e) => patch({ whatsapp_number: e.target.value })}
-              placeholder="+91 98765 43210"
+              placeholder="Enter 10-digit mobile number"
               data-testid="post-ride-whatsapp"
               disabled={submitting} className={inputCls} required
             />
             <p className="mt-1.5 text-xs text-slate-500">
-              Passengers tap a <strong>Contact on WhatsApp</strong> button on your ride page to reach you. Include country code.
+              Passengers tap a <strong>Contact on WhatsApp</strong> button on your ride page to reach you. Enter your 10-digit number; we'll add +91 automatically for the wa.me link.
             </p>
           </div>
         </section>

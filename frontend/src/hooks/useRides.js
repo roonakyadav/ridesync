@@ -17,11 +17,21 @@ export default function useRides(filters) {
   const refresh = useCallback(async () => {
     setLoading(true)
     setError(null)
-    const parsed = JSON.parse(filtersKey)
-    const { data, error: err } = await listRides(parsed)
-    if (err) setError(err)
-    setRides(data ?? [])
-    setLoading(false)
+    try {
+      const parsed = JSON.parse(filtersKey)
+      const { data, error: err } = await listRides(parsed)
+      if (err) {
+        console.error('[useRides] Failed to fetch rides:', err)
+        setError(err)
+      }
+      setRides(data ?? [])
+    } catch (err) {
+      console.error('[useRides] Unexpected error fetching rides:', err)
+      setError(err)
+      setRides([])
+    } finally {
+      setLoading(false)
+    }
   }, [filtersKey])
 
   useEffect(() => {
