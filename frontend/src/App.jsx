@@ -1,4 +1,4 @@
-import { Routes, Route, Link, Navigate } from 'react-router-dom'
+import { Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext.jsx'
 import { ToastProvider } from './context/ToastContext.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
@@ -17,6 +17,13 @@ import NotFound from './pages/NotFound.jsx'
 
 function TopBar() {
   const { user, signOut } = useAuth()
+  const navigate = useNavigate()
+
+  async function handleSignOut() {
+    await signOut()
+    navigate('/', { replace: true })
+  }
+
   return (
     <header className="border-b border-slate-200/80 bg-white/90 backdrop-blur sticky top-0 z-30">
       <div className="max-w-6xl mx-auto flex items-center justify-between gap-3 px-4 sm:px-6 py-3">
@@ -38,7 +45,20 @@ function TopBar() {
               >
                 Dashboard
               </Link>
-              <NotificationBell />
+              {/* Quick Post Ride button instead of notification bell */}
+              <Link
+                to="/post-ride"
+                data-testid="topbar-post-ride-link"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-indigo-700 hover:text-indigo-900 hover:bg-indigo-50 transition font-medium"
+                title="Post a new ride"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+                <span className="hidden sm:inline">Post Ride</span>
+              </Link>
               <Link
                 to={`/profile/${user.id}`}
                 data-testid="topbar-profile-link"
@@ -57,7 +77,7 @@ function TopBar() {
               </Link>
               <button
                 type="button"
-                onClick={() => signOut()}
+                onClick={handleSignOut}
                 data-testid="topbar-signout-button"
                 className="ml-1 px-3.5 py-1.5 rounded-full bg-slate-900 text-white hover:bg-slate-800 active:bg-slate-950 transition text-xs sm:text-sm"
               >
