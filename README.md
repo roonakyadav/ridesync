@@ -4,6 +4,7 @@ A college carpooling platform for SST students.
 Frontend: **Vite + React 18 + Tailwind CSS + React Router v6**
 Backend: **Supabase** (Postgres + Auth + Realtime)
 
+
 ---
 
 ## Phase 1 — What's done
