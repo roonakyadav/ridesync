@@ -331,8 +331,8 @@ returns trigger
 language plpgsql
 as $$
 begin
-  -- new ride → host occupies 1 seat, 0 confirmed passengers yet.
-  new.seats_available := greatest(new.total_seats - 1, 0);
+  -- new ride → all seats are available (host doesn't reduce available count)
+  new.seats_available := new.total_seats;
   return new;
 end;
 $$;
@@ -353,7 +353,7 @@ as $$
 begin
   if new.total_seats is distinct from old.total_seats then
     new.seats_available := greatest(
-      new.total_seats - 1 - coalesce((
+      new.total_seats - coalesce((
         select count(*)
         from public.ride_passengers rp
         where rp.ride_id = new.ride_id
@@ -386,7 +386,7 @@ begin
 
   update public.rides r
   set seats_available = greatest(
-    r.total_seats - 1 - coalesce((
+    r.total_seats - coalesce((
       select count(*) from public.ride_passengers rp
       where rp.ride_id = r.ride_id and rp.status = 'confirmed'
     ), 0),
