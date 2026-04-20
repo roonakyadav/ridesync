@@ -53,27 +53,33 @@ export function AuthProvider({ children }) {
     setProfile(data ?? null)
   }, [])
 
-  // Initial session load.
+  // Initial session load on mount (fixes hard refresh logout bug).
   useEffect(() => {
     let mounted = true
     ;(async () => {
-      const { data } = await supabase.auth.getSession()
-      if (!mounted) return
-      const s = data?.session ?? null
-      setSession(s)
-      setUser(s?.user ?? null)
-      if (s?.user) {
-        await ensureProfileRow(s.user)
-        await loadProfile(s.user.id)
+      try {
+        const { data } = await supabase.auth.getSession()
+        if (!mounted) return
+        const s = data?.session ?? null
+        setSession(s)
+        setUser(s?.user ?? null)
+        if (s?.user) {
+          await ensureProfileRow(s.user)
+          await loadProfile(s.user.id)
+        }
+      } catch (err) {
+        console.error('[AuthContext] Failed to get session:', err)
+      } finally {
+        // Always set loading = false after getSession resolves
+        if (mounted) setLoading(false)
       }
-      setLoading(false)
     })()
     return () => {
       mounted = false
     }
   }, [loadProfile])
 
-  // Subscribe to auth state changes.
+  // Subscribe to auth state changes (for subsequent changes only).
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, nextSession) => {
@@ -89,7 +95,9 @@ export function AuthProvider({ children }) {
         }
       }
     )
-    return () => subscription?.unsubscribe()
+    return () => {
+      subscription.unsubscribe()
+    }
   }, [loadProfile])
 
   const signInWithMagicLink = useCallback(async (email) => {

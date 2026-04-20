@@ -66,7 +66,7 @@ export async function listRides(filters = {}) {
   if (filters.trip_type && filters.trip_type !== 'all') {
     query = query.eq('trip_type', filters.trip_type)
   }
-  if (filters.minSeatsAvailable && filters.minSeatsAvailable > 0) {
+  if (typeof filters.minSeatsAvailable === 'number' && filters.minSeatsAvailable > 0) {
     query = query.gte('seats_available', filters.minSeatsAvailable)
   }
 
