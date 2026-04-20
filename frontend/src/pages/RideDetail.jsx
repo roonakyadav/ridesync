@@ -185,9 +185,9 @@ export default function RideDetail() {
         Back to feed
       </Link>
 
-      <div className="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-6">
         {/* Main column */}
-        <div className="lg:col-span-2 space-y-5">
+        <div className="sm:col-span-2 space-y-5">
           {/* Hero card */}
           <div className="bg-white border border-slate-200 rounded-2xl shadow-card overflow-hidden">
             <div className={`h-1.5 ${ts.accent}`} />
@@ -251,6 +251,7 @@ export default function RideDetail() {
                     {pendingAction === 'self' ? 'Sending…' : 'Book Slot'}
                   </button>
                 )}
+                {/* WhatsApp button visible on all screen sizes */}
                 {!isHost && isOpen && waLink && (
                   <a
                     href={waLink} target="_blank" rel="noopener noreferrer"
@@ -264,6 +265,13 @@ export default function RideDetail() {
                   </a>
                 )}
               </div>
+
+              {/* Help note for non-host users */}
+              {!isHost && user && !myStatus && isOpen && hasSeats && waLink && (
+                <div className="mt-4 text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
+                  💡 <strong>Tip:</strong> Contact the host on WhatsApp first to confirm pickup location and timing, then click <strong>Book Slot</strong> to send your join request.
+                </div>
+              )}
 
               {/* My status banners */}
               {!isHost && myStatus === 'pending' && (
@@ -357,8 +365,8 @@ export default function RideDetail() {
           </div>
         </div>
 
-        {/* Side column — host card + action buttons */}
-        <aside className="space-y-4 lg:sticky lg:top-24 self-start">
+        {/* Side column — host card */}
+        <aside className="space-y-4 sm:sticky sm:top-24 self-start">
           <div className="bg-white border border-slate-200 rounded-2xl shadow-card p-5">
             <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Host</div>
             <div className="mt-3 flex items-center gap-3">
@@ -393,23 +401,6 @@ export default function RideDetail() {
               </svg>
             </Link>
           </div>
-
-          {/* WhatsApp contact button in sidebar for non-host users */}
-          {!isHost && isOpen && waLink && (
-            <div className="bg-white border border-slate-200 rounded-2xl shadow-card p-5">
-              <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Contact</div>
-              <a
-                href={waLink} target="_blank" rel="noopener noreferrer"
-                data-testid="ride-detail-whatsapp-sidebar"
-                className="mt-3 w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-[#25D366] text-white text-sm font-medium hover:bg-[#1ebe57] transition shadow-sm"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M20.52 3.48A11.86 11.86 0 0 0 12.04 0C5.5 0 .2 5.3.2 11.84c0 2.09.55 4.12 1.59 5.91L0 24l6.4-1.68a11.82 11.82 0 0 0 5.63 1.44h.01c6.54 0 11.84-5.3 11.84-11.84 0-3.16-1.23-6.13-3.36-8.44ZM12.04 21.5h-.01a9.63 9.63 0 0 1-4.91-1.34l-.35-.21-3.8 1 1.02-3.7-.23-.38a9.66 9.66 0 0 1-1.48-5.03c0-5.34 4.35-9.68 9.69-9.68 2.59 0 5.02 1.01 6.85 2.84a9.62 9.62 0 0 1 2.84 6.85c0 5.34-4.35 9.68-9.62 9.68Zm5.56-7.24c-.3-.15-1.79-.88-2.07-.98-.28-.1-.48-.15-.68.15-.2.3-.79.98-.96 1.19-.18.2-.35.22-.65.07-.3-.15-1.27-.47-2.43-1.5-.9-.8-1.5-1.78-1.68-2.08-.18-.3-.02-.47.13-.62.14-.14.3-.35.45-.53.15-.18.2-.3.3-.5.1-.2.05-.38-.02-.53-.07-.15-.68-1.64-.93-2.25-.25-.59-.5-.51-.68-.52-.18-.01-.38-.01-.58-.01a1.1 1.1 0 0 0-.8.38c-.28.3-1.06 1.04-1.06 2.53 0 1.5 1.08 2.94 1.23 3.14.15.2 2.12 3.25 5.14 4.55.72.31 1.28.5 1.72.63.72.23 1.38.2 1.9.12.58-.09 1.79-.73 2.05-1.44.25-.71.25-1.32.17-1.44-.07-.12-.27-.2-.57-.35Z" />
-                </svg>
-                Contact on WhatsApp
-              </a>
-            </div>
-          )}
 
           <div className="bg-gradient-to-br from-indigo-50 to-white border border-indigo-100 rounded-2xl p-5">
             <div className="flex items-start gap-3">
