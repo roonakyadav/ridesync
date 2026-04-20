@@ -8,6 +8,29 @@ html, body, #root {
 
 body {
   margin: 0;
-  font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #f8fafc; /* slate-50 */
+  color: #0f172a; /* slate-900 */
+  text-rendering: optimizeLegibility;
 }
+
+/* Tabular numerals for counters */
+.tabular-nums { font-variant-numeric: tabular-nums; }
+
+/* Unified focus ring — applies to most interactive elements */
+*:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgb(99 102 241 / 0.22); /* indigo-500 @ 22% */
+  border-radius: 0.5rem;
+}
+
+/* Nicer selection color */
+::selection {
+  background: rgb(199 210 254);  /* indigo-200 */
+  color: rgb(30 27 75);           /* indigo-950 */
+}
+
+/* Firefox scrollbar (light, unobtrusive) */
+html { scrollbar-color: #cbd5e1 transparent; }

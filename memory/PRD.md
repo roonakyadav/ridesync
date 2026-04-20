@@ -134,10 +134,36 @@ Vite + React + Tailwind + React Router v6 + `@supabase/supabase-js`; full SQL sc
   - `PassengerList` rows: `flex-wrap` so accept/decline buttons wrap under the name on narrow screens
   - `UserProfile`: avatar scales `w-14 sm:w-16`, name uses `break-words`, email uses `break-all`
 
-### Verified (browser automation, mobile 375×812 + desktop 1920×800)
-- Home, Login, and protected-route gating all render correctly at both viewports
-- Lint clean (ESLint, no errors)
-- Zero runtime errors after fixing two stale duplicate-tail leftovers in RideDetail.jsx and UserProfile.jsx from earlier partial replaces
+### 2026-01-20 — Phase 7.5: Major UI upgrade (pre-deploy v2)
+- **Design system foundation:**
+  - Font: **Plus Jakarta Sans** (wght 400/500/600/700/800) from Google Fonts with preconnect; applied globally via Tailwind `fontFamily.sans` + `fontFamily.display`
+  - Colors: primary **slate-900/950**, accent **indigo-600/violet-600**; trip types = amber/indigo/sky/slate; status = emerald/amber/rose/slate families
+  - Custom shadows: `shadow-card`, `shadow-card-hover` (deeper on hover lift)
+  - Animations: `animate-fade-in`, `animate-slide-up` keyframes
+  - Unified focus ring via `*:focus-visible` in global CSS (indigo @ 22% alpha)
+- **Logo component** — icon (rounded black square with route-pin SVG) + `Ride` slate-900 + `Sync` indigo-600 wordmark; `to` prop for linked/static use
+- **TopBar** — sticky with backdrop blur; logo; `Feed` / `Dashboard` pill links with hover; notification bell; user avatar circle (gradient indigo) + hover; pill `Sign out` (slate-900 bg); mobile-responsive (labels collapse progressively)
+- **Home/Landing** — full hero treatment with decorative gradient blobs, "closed community" eyebrow tag, gradient-accent headline, subtext, **Find a ride** CTA + **Post a ride** secondary CTA, 3 feature tiles (Verified classmates / Real-time seats / Chat on WhatsApp) with colored icon chips
+- **Login** — gradient background blobs, centered branded card, email-icon input, emerald success state with checkmark circle
+- **RideFeed** — "Live feed" eyebrow + larger display headline, styled FilterBar with sectioned inputs (search icon, indigo range slider)
+- **RideCard** — 4px colored left border by trip type, gradient initials avatar, calendar icon for date, seat-count **SeatPill** (color shifts emerald → amber → rose by seats left), `hover:-translate-y-0.5` lift
+- **RideDetail** — 2-column desktop layout (2/3 main + 1/3 sticky host sidebar), trip-type accent bar on card top, prominent status + type badges, 3-col stat tiles (Seats / Cost / Total), WhatsApp button uses **official WhatsApp green `#25D366`**, sticky host card with gradient avatar + "View profile" CTA, info tip card explaining the coordination flow
+- **PostRide** — card with 3 sections (**Where & when** / **Seats & cost** / **Contact**) separated by dividers; every field label has indigo inline SVG icon; ₹ prefix inside cost input; sticky footer action bar
+- **Dashboard** — pill tabs in slate-100 container with count badges (reversed colors on active), "pending requests to review" nudge copy when > 0; ride cards show **red pending-count badge** on top-right of hosted cards with pending, colored status badges per row
+- **Profile** — hero gradient banner (indigo→violet), squared avatar overlapping banner (ring-4 white), stat tiles with icon chips (indigo for posted, emerald for joined)
+- **PassengerList** — gradient avatar per row, colored status rings (emerald/amber/rose), Accept = emerald bg, Decline/Remove/Withdraw = outlined
+- **404 NotFound** — oversized slate-200 404 display number, typographic hierarchy, pill home button
+- All tests IDs preserved; all functional paths untouched
+
+### Verified (browser automation at 1440×900 + 390×844)
+- Home, Login, 404 render cleanly both viewports
+- Plus Jakarta Sans loads correctly from Google Fonts
+- Hero gradient blobs don't overflow on mobile
+- Feature tiles stack single-column on mobile, 3-col on desktop
+- Lint clean, zero page errors
+
+### Not yet deploy-pushed
+The UI upgrade is live on the preview URL; ride-sync.vercel.app still has the old monochrome version. Push to GitHub via **Save to GitHub** → Vercel auto-deploys from `main`.
 
 ## Supabase dashboard prerequisites (manual — user)
 1. Re-run `/app/SUPABASE_SCHEMA.sql` to install Phase 3 triggers + `seats_available` column
